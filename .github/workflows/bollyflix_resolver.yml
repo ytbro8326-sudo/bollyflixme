@@ -36,8 +36,12 @@ jobs:
       - name: Run BollyFlix Resolver
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY || '6fad3f86b8452ee232deb7977d7dcf58' }}
+          RESIDENTIAL_PROXY: ${{ secrets.RESIDENTIAL_PROXY || 'http://dxicdysy:yndikr9coeto@31.59.20.176:6754' }}
+          DEBUG: "1"
           PYTHONUNBUFFERED: "1"
+
         run: |
+
           CUSTOM_URL="${{ github.event.inputs.custom_url }}"
 
           echo "======================================================="
