@@ -44,6 +44,10 @@ TXT_OUTPUT_FILE = "bollyflix.txt"
 JSON_OUTPUT_FILE = "resolved_movie_links.json"
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "6fad3f86b8452ee232deb7977d7dcf58")
 
+# Proxy & Debug Configuration
+RESIDENTIAL_PROXY = os.environ.get("RESIDENTIAL_PROXY", os.environ.get("PROXY", "http://viqhajod:aisg6z1gsn25@31.59.20.176:6754")).strip()
+ENABLE_DEBUG = os.environ.get("DEBUG", "1").strip().lower() in ["1", "true", "yes"]
+
 DEFAULT_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -57,34 +61,116 @@ DEFAULT_HEADERS = {
 
 
 class LinkFlowSession:
-    """HTTP Client powered by curl_cffi for Cloudflare bypass & redirection tracking."""
-    def __init__(self, timeout: int = 20):
+    """
+    HTTP Client with:
+    1. curl_cffi Chrome-120 TLS fingerprint impersonation
+    2. Optional / Fallback residential proxy support
+    3. Multi-layer fallback to plain requests and urllib
+    4. Verbose request/response debugger
+    """
+    def __init__(self, timeout: int = 25, proxy: Optional[str] = None):
         self.timeout = timeout
+        self.proxy = proxy if proxy is not None else RESIDENTIAL_PROXY
+        self.session = None
+        self._init_session()
+
+    def _init_session(self, use_proxy: bool = False):
         if HAS_CURL_CFFI:
-            self.session = cffi_requests.Session(impersonate="chrome120")
+            proxies = {"http": self.proxy, "https": self.proxy} if (use_proxy and self.proxy) else None
+            try:
+                self.session = cffi_requests.Session(impersonate="chrome120", proxies=proxies)
+            except Exception as e:
+                if ENABLE_DEBUG:
+                    print(f"  [DEBUG] Failed to init curl_cffi session (proxy={use_proxy}): {e}")
+                self.session = None
         else:
             self.session = None
+
+    def log_debug(self, msg: str) -> None:
+        if ENABLE_DEBUG:
+            print(f"  [DEBUG] {msg}", flush=True)
 
     def get(self, url: str, headers: Optional[Dict[str, str]] = None, allow_redirects: bool = True, timeout: Optional[int] = None):
         t = timeout or self.timeout
         h = {**DEFAULT_HEADERS, **(headers or {})}
-        if self.session:
-            return self.session.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
         
-        req = urllib.request.Request(url, headers=h)
-        resp = urllib.request.urlopen(req, timeout=t)
-        return resp
+        # 1. Try curl_cffi direct
+        if HAS_CURL_CFFI:
+            try:
+                s = cffi_requests.Session(impersonate="chrome120")
+                resp = s.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
+                text = resp.text if hasattr(resp, "text") else ""
+                self.log_debug(f"GET (curl_cffi direct) {url[:70]} -> HTTP {resp.status_code} ({len(text)} bytes)")
+                if resp.status_code == 200 and len(text) > 500 and "Just a moment" not in text:
+                    return resp
+            except Exception as exc:
+                self.log_debug(f"curl_cffi direct failed for {url[:50]}: {exc}")
+
+        # 2. Try curl_cffi with Residential Proxy (if configured)
+        if HAS_CURL_CFFI and self.proxy:
+            try:
+                proxies = {"http": self.proxy, "https": self.proxy}
+                s = cffi_requests.Session(impersonate="chrome120", proxies=proxies)
+                resp = s.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
+                text = resp.text if hasattr(resp, "text") else ""
+                self.log_debug(f"GET (curl_cffi proxy) {url[:70]} -> HTTP {resp.status_code} ({len(text)} bytes)")
+                if resp.status_code == 200 and len(text) > 500 and "Just a moment" not in text:
+                    return resp
+            except Exception as exc:
+                self.log_debug(f"curl_cffi proxy failed for {url[:50]}: {exc}")
+
+        # 3. Fallback to standard requests (direct)
+        try:
+            import requests as std_requests
+            r = std_requests.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
+            self.log_debug(f"GET (requests direct) {url[:70]} -> HTTP {r.status_code} ({len(r.text)} bytes)")
+            if r.status_code == 200:
+                return r
+        except Exception as exc:
+            self.log_debug(f"requests direct failed: {exc}")
+
+        # 4. Fallback to standard requests (proxy)
+        if self.proxy:
+            try:
+                import requests as std_requests
+                proxies = {"http": self.proxy, "https": self.proxy}
+                r = std_requests.get(url, headers=h, proxies=proxies, allow_redirects=allow_redirects, timeout=t)
+                self.log_debug(f"GET (requests proxy) {url[:70]} -> HTTP {r.status_code} ({len(r.text)} bytes)")
+                if r.status_code == 200:
+                    return r
+            except Exception as exc:
+                self.log_debug(f"requests proxy failed: {exc}")
+
+        # 5. Final fallback to urllib
+        try:
+            req = urllib.request.Request(url, headers=h)
+            resp = urllib.request.urlopen(req, timeout=t)
+            self.log_debug(f"GET (urllib) {url[:70]} -> HTTP {resp.status}")
+            return resp
+        except Exception as exc:
+            self.log_debug(f"urllib failed: {exc}")
+            raise
 
     def post(self, url: str, data: Any = None, headers: Optional[Dict[str, str]] = None, timeout: Optional[int] = None):
         t = timeout or self.timeout
         h = {**DEFAULT_HEADERS, **(headers or {})}
-        if self.session:
-            return self.session.post(url, data=data, headers=h, timeout=t)
+        if HAS_CURL_CFFI:
+            try:
+                s = cffi_requests.Session(impersonate="chrome120")
+                return s.post(url, data=data, headers=h, timeout=t)
+            except Exception:
+                pass
         
+        try:
+            import requests as std_requests
+            return std_requests.post(url, data=data, headers=h, timeout=t)
+        except Exception:
+            pass
+
         encoded_data = urlencode(data).encode("utf-8") if isinstance(data, dict) else data
         req = urllib.request.Request(url, data=encoded_data, headers=h)
-        resp = urllib.request.urlopen(req, timeout=t)
-        return resp
+        return urllib.request.urlopen(req, timeout=t)
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -579,48 +665,55 @@ def fetch_movie_links_from_year_listing(
     session = session or LinkFlowSession()
     print(f"[*] Crawling listing page: {listing_url}", flush=True)
     
-    resp = session.get(listing_url, timeout=20)
+    resp = session.get(listing_url, timeout=25)
     html = resp.text if hasattr(resp, "text") else ""
+    if not html:
+        print(f"[!] Warning: Empty response received for listing URL: {listing_url}")
+        return []
+
     soup = BeautifulSoup(html, "html.parser")
-    
     movies: List[Dict[str, str]] = []
     seen_urls = set()
-    
-    headers = soup.find_all("header")
-    for h in headers:
-        a_tags = h.select("h2.title a, h2.front-view-title a, h2 a")
-        if not a_tags:
-            a_tags = h.find_all("a", href=True)
-        
-        for a in a_tags:
-            href = a.get("href", "").strip()
-            title = a.get_text(strip=True)
-            if not href or not title:
-                continue
-            clean_href = href.rstrip("/")
-            if clean_href in ["https://bollyflix.free", "http://bollyflix.free", ""]:
-                continue
-            if "/movies-by-year/" in href or "/category/" in href or "/tag/" in href:
-                continue
-            if href not in seen_urls:
-                seen_urls.add(href)
-                movies.append({"title": title, "url": href, "tmdb_imdb": "", "tmdb_url": "", "imdb_url": ""})
 
+    # Selector Strategy 1: Articles and Article Headers
+    for art in soup.find_all("article"):
+        h_tag = art.find(["h2", "h3", "h4", "h1"])
+        a_tag = h_tag.find("a", href=True) if h_tag else art.find("a", href=True)
+        if a_tag:
+            href = a_tag.get("href", "").strip()
+            title = a_tag.get_text(strip=True)
+            if href and title and href.startswith("http"):
+                clean_href = href.rstrip("/")
+                if clean_href not in ["https://bollyflix.free", "http://bollyflix.free"] and not any(k in href for k in ["/movies-by-year/", "/category/", "/tag/", "/page/"]):
+                    if href not in seen_urls:
+                        seen_urls.add(href)
+                        movies.append({"title": title, "url": href, "tmdb_imdb": "", "tmdb_url": "", "imdb_url": ""})
+
+    # Selector Strategy 2: Header H2 links
     if not movies:
-        for a in soup.select("h2.front-view-title a, h2.title a, article header a"):
+        for a in soup.select("header h2.title a, header h2.front-view-title a, header h2 a, h2.title a, h2.front-view-title a"):
             href = a.get("href", "").strip()
             title = a.get_text(strip=True)
-            clean_href = href.rstrip("/")
-            if clean_href in ["https://bollyflix.free", "http://bollyflix.free", ""] or not title:
-                continue
-            if "/movies-by-year/" in href or "/category/" in href or "/tag/" in href:
-                continue
-            if href not in seen_urls:
-                seen_urls.add(href)
-                movies.append({"title": title, "url": href, "tmdb_imdb": "", "tmdb_url": "", "imdb_url": ""})
+            if href and title and href.startswith("http"):
+                clean_href = href.rstrip("/")
+                if clean_href not in ["https://bollyflix.free", "http://bollyflix.free"] and not any(k in href for k in ["/movies-by-year/", "/category/", "/tag/", "/page/"]):
+                    if href not in seen_urls:
+                        seen_urls.add(href)
+                        movies.append({"title": title, "url": href, "tmdb_imdb": "", "tmdb_url": "", "imdb_url": ""})
+
+    # Selector Strategy 3: Universal Regex Fallback over all links
+    if not movies:
+        for a in soup.find_all("a", href=True):
+            href = a.get("href", "").strip()
+            title = a.get_text(strip=True)
+            if href and title and len(title) > 5 and "-movie" in href.lower():
+                if href not in seen_urls and not any(k in href for k in ["/movies-by-year/", "/category/", "/tag/", "/page/"]):
+                    seen_urls.add(href)
+                    movies.append({"title": title, "url": href, "tmdb_imdb": "", "tmdb_url": "", "imdb_url": ""})
 
     print(f"[✓] Found {len(movies)} total movie post(s) on listing page.\n", flush=True)
     return movies
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
