@@ -1,0 +1,68 @@
+name: BollyFlix Link Resolver Auto-Sync
+
+on:
+  schedule:
+    # Runs automatically every 6 hours (at 00:00, 06:00, 12:00, and 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      custom_url:
+        description: 'Optional BollyFlix URL (movie or category page) to resolve, or leave blank for full listing sync'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  resolve-and-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run BollyFlix Resolver
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY || '6fad3f86b8452ee232deb7977d7dcf58' }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          CUSTOM_URL="${{ github.event.inputs.custom_url }}"
+
+          echo "======================================================="
+          echo "         BOLLYFLIX LINK FLOW RESOLVER PIPELINE         "
+          echo "======================================================="
+
+          if [ -n "$CUSTOM_URL" ]; then
+            echo "[*] Resolving custom URL: $CUSTOM_URL"
+            python bollyflix_link_resolver.py "$CUSTOM_URL"
+          else
+            echo "[*] Running auto-sync against listing and bollyflix.txt..."
+            python bollyflix_link_resolver.py
+          fi
+
+      - name: Commit and Push Updated Links
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add bollyflix.txt resolved_movie_links.json || true
+
+          if git diff --staged --quiet; then
+            echo "[✓] No new movies or link updates found to commit."
+          else
+            git commit -m "Auto-sync BollyFlix links & database [skip ci]"
+            git push
+            echo "[✓] Successfully pushed updated bollyflix.txt and resolved_movie_links.json to repository."
+          fi
