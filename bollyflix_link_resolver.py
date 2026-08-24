@@ -90,9 +90,10 @@ class LinkFlowSession:
     """
     def __init__(self, timeout: int = 25, proxy: Optional[str] = None):
         self.timeout = timeout
-        self.proxy = proxy if proxy is not None else RESIDENTIAL_PROXY
+        self.proxy = proxy if proxy is not None else (RESIDENTIAL_PROXIES[0] if RESIDENTIAL_PROXIES else "")
         self.session = None
         self._init_session()
+
 
     def _init_session(self, use_proxy: bool = False):
         if HAS_CURL_CFFI:
