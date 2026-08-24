@@ -45,7 +45,26 @@ JSON_OUTPUT_FILE = "resolved_movie_links.json"
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "6fad3f86b8452ee232deb7977d7dcf58")
 
 # Proxy & Debug Configuration
-RESIDENTIAL_PROXY = os.environ.get("RESIDENTIAL_PROXY", os.environ.get("PROXY", "http://viqhajod:aisg6z1gsn25@31.59.20.176:6754")).strip()
+
+RESIDENTIAL_PROXIES = [
+    "http://dxicdysy:yndikr9coeto@31.59.20.176:6754",
+    "http://viqhajod:aisg6z1gsn25@31.59.20.176:6754",
+    "http://viqhajod:aisg6z1gsn25@31.56.127.193:7684",
+    "http://viqhajod:aisg6z1gsn25@45.38.107.97:6014",
+    "http://viqhajod:aisg6z1gsn25@198.105.121.200:6462",
+    "http://viqhajod:aisg6z1gsn25@64.137.96.74:6641",
+    "http://viqhajod:aisg6z1gsn25@198.23.243.226:6361",
+    "http://viqhajod:aisg6z1gsn25@38.154.185.97:6370",
+    "http://viqhajod:aisg6z1gsn25@84.247.60.125:6095",
+    "http://viqhajod:aisg6z1gsn25@142.111.67.146:5611",
+    "http://viqhajod:aisg6z1gsn25@191.96.254.138:6185",
+]
+
+
+CUSTOM_ENV_PROXY = os.environ.get("RESIDENTIAL_PROXY", os.environ.get("PROXY", "")).strip()
+if CUSTOM_ENV_PROXY and CUSTOM_ENV_PROXY not in RESIDENTIAL_PROXIES:
+    RESIDENTIAL_PROXIES.insert(0, CUSTOM_ENV_PROXY)
+
 ENABLE_DEBUG = os.environ.get("DEBUG", "1").strip().lower() in ["1", "true", "yes"]
 
 DEFAULT_HEADERS = {
@@ -58,6 +77,7 @@ DEFAULT_HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
     "Connection": "keep-alive",
 }
+
 
 
 class LinkFlowSession:
@@ -106,40 +126,42 @@ class LinkFlowSession:
             except Exception as exc:
                 self.log_debug(f"curl_cffi direct failed for {url[:50]}: {exc}")
 
-        # 2. Try curl_cffi with Residential Proxy (if configured)
-        if HAS_CURL_CFFI and self.proxy:
-            try:
-                proxies = {"http": self.proxy, "https": self.proxy}
-                s = cffi_requests.Session(impersonate="chrome120", proxies=proxies)
-                resp = s.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
-                text = resp.text if hasattr(resp, "text") else ""
-                self.log_debug(f"GET (curl_cffi proxy) {url[:70]} -> HTTP {resp.status_code} ({len(text)} bytes)")
-                if resp.status_code == 200 and len(text) > 500 and "Just a moment" not in text:
-                    return resp
-            except Exception as exc:
-                self.log_debug(f"curl_cffi proxy failed for {url[:50]}: {exc}")
+        # 2. Try curl_cffi rotating through Residential Proxy pool
+        if HAS_CURL_CFFI and RESIDENTIAL_PROXIES:
+            for p in RESIDENTIAL_PROXIES[:3]:
+                try:
+                    proxies = {"http": p, "https": p}
+                    s = cffi_requests.Session(impersonate="chrome120", proxies=proxies)
+                    resp = s.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
+                    text = resp.text if hasattr(resp, "text") else ""
+                    self.log_debug(f"GET (curl_cffi proxy {p.split('@')[-1]}) {url[:70]} -> HTTP {resp.status_code} ({len(text)} bytes)")
+                    if resp.status_code == 200 and len(text) > 500 and "Just a moment" not in text:
+                        return resp
+                except Exception as exc:
+                    self.log_debug(f"curl_cffi proxy ({p.split('@')[-1]}) failed: {exc}")
 
         # 3. Fallback to standard requests (direct)
         try:
             import requests as std_requests
             r = std_requests.get(url, headers=h, allow_redirects=allow_redirects, timeout=t)
             self.log_debug(f"GET (requests direct) {url[:70]} -> HTTP {r.status_code} ({len(r.text)} bytes)")
-            if r.status_code == 200:
+            if r.status_code == 200 and "Just a moment" not in r.text:
                 return r
         except Exception as exc:
             self.log_debug(f"requests direct failed: {exc}")
 
-        # 4. Fallback to standard requests (proxy)
-        if self.proxy:
-            try:
-                import requests as std_requests
-                proxies = {"http": self.proxy, "https": self.proxy}
-                r = std_requests.get(url, headers=h, proxies=proxies, allow_redirects=allow_redirects, timeout=t)
-                self.log_debug(f"GET (requests proxy) {url[:70]} -> HTTP {r.status_code} ({len(r.text)} bytes)")
-                if r.status_code == 200:
-                    return r
-            except Exception as exc:
-                self.log_debug(f"requests proxy failed: {exc}")
+        # 4. Fallback to standard requests with proxy pool rotation
+        if RESIDENTIAL_PROXIES:
+            for p in RESIDENTIAL_PROXIES[:3]:
+                try:
+                    import requests as std_requests
+                    proxies = {"http": p, "https": p}
+                    r = std_requests.get(url, headers=h, proxies=proxies, allow_redirects=allow_redirects, timeout=t)
+                    self.log_debug(f"GET (requests proxy {p.split('@')[-1]}) {url[:70]} -> HTTP {r.status_code} ({len(r.text)} bytes)")
+                    if r.status_code == 200 and "Just a moment" not in r.text:
+                        return r
+                except Exception as exc:
+                    self.log_debug(f"requests proxy failed: {exc}")
 
         # 5. Final fallback to urllib
         try:
@@ -150,6 +172,7 @@ class LinkFlowSession:
         except Exception as exc:
             self.log_debug(f"urllib failed: {exc}")
             raise
+
 
     def post(self, url: str, data: Any = None, headers: Optional[Dict[str, str]] = None, timeout: Optional[int] = None):
         t = timeout or self.timeout
