@@ -160,3 +160,12 @@ tmdb/imdb:1392469/tt35064672
 title:Download Cocktail 2 (2026) Hindi Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
 main_url:https://bollyflix.free/cocktail-2-2026-hindi-movie/
 ============================================================================
+
+
+============================================================================
+serail no:21
+extracted: 2026-08-25 00:24:06 UTC+6
+tmdb/imdb:1538273/tt39260895
+title:Download Pyaar Prema Kalyanam (2026) Dual Audio {Hindi-Tamil} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/pyaar-prema-kalyanam-2026-dual-audio-hindi-tamil-movie/
+============================================================================
