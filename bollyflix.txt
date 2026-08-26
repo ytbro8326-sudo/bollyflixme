@@ -169,3 +169,12 @@ tmdb/imdb:1538273/tt39260895
 title:Download Pyaar Prema Kalyanam (2026) Dual Audio {Hindi-Tamil} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
 main_url:https://bollyflix.free/pyaar-prema-kalyanam-2026-dual-audio-hindi-tamil-movie/
 ============================================================================
+
+
+============================================================================
+serail no:22
+extracted: 2026-08-26 06:39:43 UTC+6
+tmdb/imdb:1212763/tt31170389
+title:Download Evil Dead Burn (2026) Dual Audio {Hindi-English} Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/evil-dead-burn-2026-dual-audio-hindi-english-movie/
+============================================================================
