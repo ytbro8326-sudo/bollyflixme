@@ -205,3 +205,12 @@ tmdb/imdb:1723460/tt43619305
 title:Download Toxic (2026) Hindi Movie 480p | 720p | 1080p | 1080p HQ HDTC ESub
 main_url:https://bollyflix.free/toxic-2026-hindi-movie/
 ============================================================================
+
+
+============================================================================
+serail no:26
+extracted: 2026-08-27 23:03:39 UTC+6
+tmdb/imdb:1213243/tt27530512
+title:Download Toxic (2026) Multi Audio {Hindi-Tamil-Telugu-Kannada} Movie 480p | 720p | 1080p HDTC V2
+main_url:https://bollyflix.free/toxic-a-fairy-tale-for-grown-ups-2026-multi-audio-hindi-tamil-telugu-kannada-movie/
+============================================================================
