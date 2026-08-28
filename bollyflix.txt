@@ -214,3 +214,60 @@ tmdb/imdb:1213243/tt27530512
 title:Download Toxic (2026) Multi Audio {Hindi-Tamil-Telugu-Kannada} Movie 480p | 720p | 1080p HDTC V2
 main_url:https://bollyflix.free/toxic-a-fairy-tale-for-grown-ups-2026-multi-audio-hindi-tamil-telugu-kannada-movie/
 ============================================================================
+
+
+============================================================================
+serail no:27
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1083381/tt26657236
+title:Download Backrooms (2026) Dual Audio {Hindi-English} Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/backrooms-2026-dual-audio-hindi-english-movie/
+============================================================================
+
+============================================================================
+serail no:28
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1607634/tt39300072
+title:Download Anbe Diana (2026) Dual Audio {Hindi-Telugu} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/anbe-diana-2026-dual-audio-hindi-telugu-movie/
+============================================================================
+
+============================================================================
+serail no:29
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1514682/tt37603783
+title:Download Above & Below (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/above-below-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:30
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1740614/tt39818587
+title:Download Newton’s 3rd Law (2026) Dual Audio {Hindi-Telugu} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/newtons-3rd-law-2026-dual-audio-hindi-telugu-movie/
+============================================================================
+
+============================================================================
+serail no:31
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1607634/tt39300072
+title:Download Anbe Diana (2026) Dual Audio {Hindi-Tamil} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/anbe-diana-2026-dual-audio-hindi-tamil-movie/
+============================================================================
+
+============================================================================
+serail no:32
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1122030/tt28363783
+title:Download Alpha (2026) Hindi Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/alpha-2026-hindi-movie/
+============================================================================
+
+============================================================================
+serail no:33
+extracted: 2026-08-28 23:52:09 UTC+6
+tmdb/imdb:1442396/tt32065777
+title:Download Nagabandham: The Secret Treasure (2026) Dual Audio {Hindi-Telugu} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/nagabandham-the-secret-treasure-2026-dual-audio-hindi-telugu-movie/
+============================================================================
