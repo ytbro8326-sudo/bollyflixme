@@ -304,3 +304,44 @@ tmdb/imdb:1560520/tt32333324
 title:Download Batman: Knightfall Part 1: Knightfall (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
 main_url:https://bollyflix.free/batman-knightfall-part-1-knightfall-2026-english-movie/
 ============================================================================
+
+
+============================================================================
+serail no:38
+extracted: 2026-08-29 17:56:32 UTC+6
+tmdb/imdb:1130948/tt27844906
+title:Download Rosebush Pruning (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/rosebush-pruning-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:39
+extracted: 2026-08-29 17:56:32 UTC+6
+tmdb/imdb:1293550/tt32389930
+title:Download Bandar (2026) Hindi Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/bandar-2026-hindi-movie/
+============================================================================
+
+============================================================================
+serail no:40
+extracted: 2026-08-29 17:56:32 UTC+6
+tmdb/imdb:1399525/tt35674521
+title:Download Rose of Nevada (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/rose-of-nevada-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:41
+extracted: 2026-08-29 17:56:32 UTC+6
+tmdb/imdb:87513/tt2012616
+title:Download Motor City (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/motor-city-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:42
+extracted: 2026-08-29 17:56:32 UTC+6
+tmdb/imdb:1654516/tt40915016
+title:Download Babita Singh Reporting (2026) Hindi Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
+main_url:https://bollyflix.free/babita-singh-reporting-2026-hindi-movie/
+============================================================================
