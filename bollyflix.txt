@@ -271,3 +271,36 @@ tmdb/imdb:1442396/tt32065777
 title:Download Nagabandham: The Secret Treasure (2026) Dual Audio {Hindi-Telugu} Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
 main_url:https://bollyflix.free/nagabandham-the-secret-treasure-2026-dual-audio-hindi-telugu-movie/
 ============================================================================
+
+
+============================================================================
+serail no:34
+extracted: 2026-08-29 07:17:37 UTC+6
+tmdb/imdb:1469342/tt36629665
+title:Download Her Private Hell (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/her-private-hell-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:35
+extracted: 2026-08-29 07:17:37 UTC+6
+tmdb/imdb:1439808/tt36307021
+title:Download Hadestown: The Musical (2026) English Movie 480p | 720p | 1080p  ESub
+main_url:https://bollyflix.free/hadestown-the-musical-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:36
+extracted: 2026-08-29 07:17:37 UTC+6
+tmdb/imdb:1741201/tt39750720
+title:Download Chompoo: Lost​ &​ Forgotten​ (2026) Thai Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/chompoo-lost-forgotten-2026-thai-movie/
+============================================================================
+
+============================================================================
+serail no:37
+extracted: 2026-08-29 07:17:37 UTC+6
+tmdb/imdb:1560520/tt32333324
+title:Download Batman: Knightfall Part 1: Knightfall (2026) English Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.free/batman-knightfall-part-1-knightfall-2026-english-movie/
+============================================================================
