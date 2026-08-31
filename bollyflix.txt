@@ -506,3 +506,52 @@ tmdb/imdb:1122030/tt28363783
 title:Download Alpha (2026) Hindi Movie 480p | 720p | 1080p | 2160p WEB-DL ESub
 main_url:https://bollyflix.af/alpha-2026-hindi-movie/
 ============================================================================
+
+
+============================================================================
+serail no:63
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:1226699/tt35060353
+title:Download The Wrong Girls (2026) English Movie 480p | 720p | 1080p CAMRIp ESub
+main_url:https://bollyflix.af/the-wrong-girls-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:64
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:1433367/tt37853455
+title:Download One Night Only (2026) English Movie 480p | 720p | 1080p TELESYNC
+main_url:https://bollyflix.af/one-night-only-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:65
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:910850/tt32915652
+title:Download MOBILE SUIT GUNDAM HATHAWAY The Sorcery of Nymph Circe (2026) Multi Audio {Hindi-English-Japanese} Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.af/mobile-suit-gundam-hathaway-the-sorcery-of-nymph-circe-2026-multi-audio-hindi-english-japanese-movie/
+============================================================================
+
+============================================================================
+serail no:66
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:1204680/tt1756855
+title:Download Coyote vs. Acme (2026) English Movie 480p | 720p | 1080p CAMRIp
+main_url:https://bollyflix.af/coyote-vs-acme-2026-english-movie/
+============================================================================
+
+============================================================================
+serail no:67
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:860508/tt11561116
+title:Download The Whisper Man (2026) Dual Audio {Hindi-English} Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.af/the-whisper-man-2026-dual-audio-hindi-english-movie/
+============================================================================
+
+============================================================================
+serail no:68
+extracted: 2026-09-01 04:10:21 UTC+6
+tmdb/imdb:1430698/tt30217600
+title:Download The Bay (2026) Dual Audio {Hindi-English} Movie 480p | 720p | 1080p WEB-DL ESub
+main_url:https://bollyflix.af/the-bay-2026-dual-audio-hindi-english-movie/
+============================================================================
